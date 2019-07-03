@@ -1,0 +1,97 @@
+<%load("include/header.esp");%>
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+<script>
+    $(document).ready(function(height){
+        $("p").height()
+        var popHeight = $(".popup-picture").height();
+        $(".picture-comments").css("min-height",popHeight);
+        $("#button2Id").click(function(){
+            var str=$("#videoCategoryId").val();
+            if(!$("#videoCategoryId").attr("disabled") && 
+                        $.trim(str)==""){
+                alert("Please Enter the Category !");
+            }else{
+                 $("#lodingDivId").show();
+                 $("#saveId").submit();
+            }
+        });
+    });
+</script>
+<script>
+    function setCategory(v){
+        if(v=='other'){
+            $("#videoCategoryId").val("");
+            $("#videoCategoryId").removeAttr("disabled");
+        }else{
+            $("#videoCategoryId").val("");
+            $("#videoCategoryId").attr("disabled","true");
+        }
+    }
+</script>
+</head>
+
+<body>
+<form class="hform" id="saveId" method="POST" action="<%=request.getContextPath()%>/servlet/gallery/show.uploadVideo" enctype="multipart/form-data">  
+    <div class="album-page-header">
+      <h3>Add Video</h3>
+    </div>
+    <div class="portlet-content">
+    <div class="form-section" style="border-bottom:1px solid #666;">
+        <div class="form-field">
+          <label>Title of Video</label>
+          <div class="form-input">
+            <input type="text" name="videoTitle" id="textfield" style="width:160px;" />
+          </div>
+        </div>
+              
+        <div class="form-field">
+          <label>Description</label>
+          <div class="form-input">
+            <input type="text" name="videoDesc" id="textfield2" style="width:160px;" />
+          </div>
+        </div>
+        <div class="form-field">
+      <label>Category</label>
+      <div class="form-input">
+        <select name="videoCategory" id="select2" style="width:160px;" onchange="setCategory(this.value);">
+          <option value="Mix" >--Select--</option>
+          <%if( currentNodeProvided && currentNode.hasNode("video") 
+                && currentNode.getNode("video").hasNodes()){
+            var videoNodes=currentNode.getNode("video").getNodes();
+            for(i in videoNodes){
+          %>  
+          <option value="<%=videoNodes[i].getName()%>" ><%=videoNodes[i].categoryName%></option>         
+          <%  }
+          }%>
+          <option value="other" >Other Category</option>
+          </select>
+        </div>
+        </div>
+              
+        <div class="form-field">
+          <label>In case of other category</label>
+          <div class="form-input">
+            <input type="text" name="videoAddCategory" id="videoCategoryId" style="width:160px;" disabled="true" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Upload Video File</label>
+          <div class="form-input">
+            <input type="file" name="myFile" id="textfield4" style="width:160px;" />
+          </div>
+        </div>
+    </div>
+            <div class="button-container">
+        <input type="button" name="button2" id="button2Id" value="Save" />
+        <input type="button" name="button" id="button" value="Cancel" onclick="history.back();" />
+      </div>
+    </div>
+    <div style="display:none;" id="lodingDivId">
+        <div class="bg-disable"></div>
+        <div class="loding_div" >
+            <span class="loading" >Loading...</span>
+        </div>    
+    </div>
+</form>        
+</body>
+</html>

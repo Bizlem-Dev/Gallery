@@ -1,0 +1,44 @@
+<%load("include/header.esp");%>
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+<script>
+    $(function(){
+        //$('video').each(function () {
+           // this.pause();
+           // this.currentTime=0.01;
+           // alert(this.currentTime);
+       // });
+    });
+</script>
+</head>
+<body>
+    <div class="album-page-header">
+    <h3>Videos</h3>
+    <a style="float:right;" href="javascript:history.back()">Back to Albums</a>
+    </div>
+<%var videoNodes=%>
+<%if(currentNode.hasNode("video") && currentNode.getNode("video").hasNodes()){
+    var catNode=currentNode.getNode("video").getNodes();
+    for(i in catNode){
+        if(catNode[i].hasNodes()){
+        %>
+        <ul class="video-album">
+            <h4 class="album-title"><%=catNode[i].categoryName%></h4>
+            <%
+            var videoNodes=catNode[i].getNodes();
+            for(k in videoNodes){
+             %>
+             <li>
+                 <video width="250" height="140" controls>
+                      <source src="<%=request.getContextPath()+videoNodes[k]+"/"+videoNodes[k].getName()+".webm"%>" type="video/webm">
+                      Your browser does not support the video tag.
+                 </video>
+             </li>
+             <%
+            }%>
+        </ul>     
+        <%}
+    }
+}%>
+
+</body>
+</html>

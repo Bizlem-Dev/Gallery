@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Photo Story</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+           <%load("../common/links.esp");%> 
+       
+        <script>$(document).ready(function() {
+                var next = 1;
+                $(".add-more").click(function(e) {
+                    e.preventDefault();
+                    var addto = "#field" + next;
+                    var addRemove = "#field" + (next);
+                    next = next + 1;
+                    var newIn = '<input autocomplete="off" class="input form-control" id="field' + next + '" name="field' + next + '" type="file"><textarea class="form-control" rows="3" name="descrioption" placeholder="Photo description"  ></textarea><br>';
+                    var newInput = $(newIn);
+                    var removeBtn = '<button id="remove' + (next - 1) + '" class="btn btn-danger remove-me" >-</button></div><div id="field">';
+                    var removeButton = $(removeBtn);
+                    $(addto).after(newInput);
+                    $(addRemove).after(removeButton);
+                    $("#field" + next).attr('data-source', $(addto).attr('data-source'));
+                    $("#count").val(next);
+
+                    $('.remove-me').click(function(e) {
+                        e.preventDefault();
+                        var fieldNum = this.id.charAt(this.id.length - 1);
+                        var fieldID = "#field" + fieldNum;
+                        $(this).remove();
+                        $(fieldID).remove();
+                    });
+                });
+
+
+
+            });
+            function deleteRow(guestList) {
+                try {
+                    //alert("1");
+                    var table = document.getElementById(guestList);
+                    var rowCount = table.rows.length;
+                    if (rowCount > 2) {
+                        //alert("2");
+                        table.deleteRow(rowCount - 2);
+                        var rowCount1 = table.rows.length;
+                        
+                        if (rowCount1 == 4) {
+                            document.getElementById("deleteRow1").style.display = 'none';
+                        }
+
+                    }
+                } catch (e) {
+                    alert(e);
+                }
+            }
+            function addRow1(tableID) {
+
+                var table = document.getElementById(tableID);
+                var rowCount = table.rows.length;
+
+                if (rowCount > 2) {
+                    document.getElementById("deleteRow1").style.display = 'block';
+                }
+                var row = table.insertRow(rowCount - 1);
+                counts = rowCount - 1;
+
+                var cell3 = row.insertCell(0);
+                var rate = document.createElement("textarea");
+                rate.name = "picdesc";
+                rate.setAttribute("row", "5");
+                rate.setAttribute("class", "form-control");
+                rate.setAttribute("placeholder", "Description");//placeholder="Photo description" 
+                rate.id = "jsp_" + counts + "__rate";
+                cell3.appendChild(rate);
+
+                var cell2 = row.insertCell(1);
+                var selector = document.createElement('input');
+                selector.type = "file";
+                selector.name = "file";
+                selector.setAttribute("class", "form-control");
+//        selector.id = 'selBidReceivedIsPM';
+//        selector.name = 'imType';
+                cell2.appendChild(selector);
+
+            }
+
+            function processForm() {
+
+                var status = false;
+                var a = document.getElementsByName("storytitle")[0].value;
+                var b = document.getElementsByName("picdesc");
+                var c = document.getElementsByName("file");
+                if (a.length > 1) {
+                    for (i = 0; i < b.length; i++) {
+                        if (b[i].value.trim() != "" & b[i].value.trim() != "" & c[i].value.trim() != "" & c[i].value.trim() != "") {
+                            status = true;
+                        } else {
+                            status = false;
+                            alert("Please fill details !");
+                            return false;
+                        }
+                    }
+                } else {
+                    alert("Please fill details");
+                }
+if(status){
+ document.getElementById("storyForm").submit();
+}
+            }
+        </script>
+        <style>
+
+            .carousel-inner > .item > img,
+            .carousel-inner > .item > a > img {
+                width: 70%;
+                margin: auto;
+            }
+            *.{
+                .border-radius(0) !important;
+            }
+
+            #field {
+                margin-bottom:20px;
+            }
+        </style>
+    <%load("../common/header.esp");%>
+<div class="pace pace-active" style="display:none;">
+<div class="pace-progress">
+<div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div>
+</div>
+      
+
+    <section class="section">
+                
+   
+        <div class="container">
+            <form type="post" action="<%=request.getContextPath()%>/servlet/photo/photoshowsave.view" id="storyForm" method="POST" enctype="multipart/form-data">
+                Photo Story Title
+                <input type="text" class="form-control" placeholder="Title" name="storytitle"><br>
+                <input type="text"  class="form-control" placeholder="Meta Description"  name="metadescription"><br>
+                <input type="text"  class="form-control" placeholder="Meta Keywords"  name="metatag"><br>
+					<input type="hidden" name="userId" value="<%=request.getParameter("userId")%>">
+                <div class="row">
+                    <input type="hidden" name="count" value="1" />
+                </div>
+
+                <table id="im" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="50%"><label>Description</label></td>
+                        <td width="50%"><label>Select Image</label></td>
+                        <!--<td width="33%">&nbsp;</td>-->
+                    </tr><tr>
+                        <td width="50%">Photo Story&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="privacyType" value="Public">:&nbsp;Public &nbsp;&nbsp;<input type="radio" name="privacyType" value="Private">:&nbsp;Private</td>
+                        <!--<td width="33%">&nbsp;</td>-->
+                    </tr> 
+                    <tr>
+                        <td width="50%"><textarea class="form-control" rows="3" name="picdesc" placeholder="Photo description"  ></textarea></td>
+                        <td width="50%"><input type="file"  class="form-control" placeholder="Select image file"  name="file">  </td>
+                        <!--<td width="33%">&nbsp;</td>-->
+                    </tr> 
+
+
+                    <tr>
+                        <td width="50%"> <button type="button" class="btn btn-primary" onclick="addRow1('im')">Add Row</button></td>
+                        <td width="50%"><button type="button" class="btn btn-primary" id='deleteRow1' style="display:none" onclick="deleteRow('im')">Remove Row</button>
+                        </td> 
+                    </tr>
+					
+                    
+                     
+                </table> 
+               <br>
+                <button type="button" class="btn btn-primary" onclick="processForm()">Add Story</button>
+            </form> </div>
+</section>
+ <%load("../common/footer.esp");%>
+
+
+    </body>
+    </html>

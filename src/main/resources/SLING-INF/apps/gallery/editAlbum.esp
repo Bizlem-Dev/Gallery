@@ -1,0 +1,102 @@
+<%load("include/header.esp");%>
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+<script>
+    /*$(document).ready(function(){
+        var textsize = $("img.thumb-image").width()-'3'-'3';
+        $(".thumb-comments > textarea").css("width",textsize);
+    });*/
+</script>
+<script>
+    function deletePhoto(obj,photoNode){
+        $("#lodingDivId").show();
+        $.ajax({
+            type: 'POST',
+            url:'<%=request.getContextPath()%>/servlet/gallery/show.deletePhoto',
+            data:'nodeName='+photoNode,
+            success:function(){
+            $(obj).parent("div").parent("li").remove();
+                $("#lodingDivId").hide();
+            }
+        });
+     }
+    function deleteAlbum(){
+     $("#lodingDivId").show();
+        $.ajax({
+            type: 'POST',
+            url:'<%=request.getContextPath()%>/servlet/gallery/show.deletePhoto',
+            data:'nodeName=<%=currentNode%>',
+            success:function(){
+                window.location="<%=request.getContextPath()%>/servlet/gallery/show.view?userId=<%=request.getRemoteUser().replace("@","_")%>";
+            }
+        });
+     }
+    function albumCover(photoId){
+        $("#lodingDivId").show();
+        $.ajax({
+            type: 'POST',
+            url:'<%=request.getContextPath()%>/servlet/gallery/show.albumCover',
+            data:'nodeName=<%=currentNode%>&photoId='+photoId,
+            success:function(){
+                
+                $("#lodingDivId").hide();
+            }
+        });    
+    }
+    function saveAlbum(){
+        $("#editPhotoFormId").submit();
+    }
+</script>
+</head>
+<body>
+<div class="album-page-header">
+  <h3><%=currentNode.albumName%></h3>
+  <div class="album-button">
+    <a href="javascript:void(0);" onclick="saveAlbum()" ><img src="<%=request.getContextPath()%>/apps/gallery/images/icon_tick.png" align="absmiddle" />Done Editing</a>
+    <a href="javascript:void(0);" onclick="deleteAlbum()"><img src="<%=request.getContextPath()%>/apps/gallery/images/icon_delete_link.gif" 
+         align="absmiddle" /> Delete Album</a></div>
+</div>
+        
+<!--<textarea name="albumDescription" ></textarea> <a href="#">Delete Album</a><br/> -->
+
+
+<form method="POST" id="editPhotoFormId" action="<%=request.getContextPath()%>/servlet/gallery/show.saveAlbum" >
+<ul class="photo-album">
+<input type="hidden" value="<%=currentNode.getName()%>" name="albumName" />
+<input type="hidden" value="<%=request.getRemoteUser().replace("@","_")%>" name="userId" />
+<%
+if(currentNode.hasNodes()){
+    var imageNodes=currentNode.getNodes();
+    for(i in imageNodes){
+    %>  <li>
+            <div style="height:210px;">  
+                <img src="<%=request.getContextPath()+"/"+imageNodes[i].getNode("x320")%>" height="210px" />
+            </div>
+            <div class="thumb-comments">
+              <textarea name="<%=imageNodes[i].getName()%>" style="width: 100%;border: 0 none;" 
+                    rows="3" id="textfield2" placeholder="Description of this photo"><%=
+                    imageNodes[i].photoDescription?imageNodes[i].photoDescription:""%></textarea>
+            </div>    
+            <div class="thumb-icon">
+                <a href="javascript:void(0);" onclick="deletePhoto(this,'<%=imageNodes[i]%>')">
+                    <img src="<%=request.getContextPath()%>/apps/gallery/images/icon_delete_link.png" title="Delete This" /></a> 
+                <a href="javascript:void(0);" onclick="albumCover('<%=imageNodes[i].getName()%>')" >
+                    <img src="<%=request.getContextPath()%>/apps/gallery/images/icon_album_cover.png" title="Make Album Cover" /></a></div>
+            
+        </li>
+    <%    
+    }
+
+}
+
+%>
+
+</ul>
+</form>
+<div style="display:none;" id="lodingDivId">
+    <div class="bg-disable"></div>
+    <div class="loding_div" >
+        <span class="loading" >Loading...</span>
+    </div>    
+</div>
+</body>
+</html>

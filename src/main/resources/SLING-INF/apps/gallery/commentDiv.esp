@@ -1,0 +1,121 @@
+<html>
+<head>
+<script>
+
+</script>
+<script src="<%=request.getContextPath()%>/apps/gallery/js/jquery.min.js"></script>
+<script src='<%=request.getContextPath()%>/apps/gallery/js/jquery.autosize.js'></script>
+<link href="<%=request.getContextPath()%>/apps/gallery/css/album.css" rel="stylesheet" type="text/css" />
+<script>
+    $(function(){
+        $('.commentText').autosize();
+        /*$('.commentText').keypress(function(e) {
+            if(e.which == 13 && $.trim($(this).val())!='') {
+                var comment=$(this).val();
+                $.ajax({
+                    type:'POST',
+                    url: '<%=request.getContextPath()%>/servlet/gallery/show.commentPhoto',
+                    data:'userId=<%=request.getRemoteUser().replace("@","_")%>&albumId=<%=
+                            request.getParameter("album")%>&photoId=<%=
+                            request.getParameter("photoId")%>&commentId=0&comment='+
+                            comment,
+                    dataType:'html',
+                    success:function(data){
+                        $("#commentDivId").append("<div class='user-info'><div class='user-pic'>"+
+                                     "<img src='"+$("#requestUserProfileId").val()+"' class='picture'></div>"
+                                     +"<span class='user-name'>"+$("#requestUserNameId").val()
+                                     +" </span><span class='user-comments'>"+comment+"<div class='comment-action'>"
+                                     +"15 Jun 2013 15:13 <span class='divider'>.</span><span class='divider'>.</span>"
+                                     +" <a href='#'><img align='absmiddle' onclick=\"editComment(\'"+data+"\')\"' "
+                                     +"href='javascript:void(0);' src='<%=request.getContextPath()%>/apps/gallery/images"
+                                     +"/icon_edit_link.gif'></a><span class='divider'>.</span> <a href='#'>"
+                                     +"<img align='absmiddle' onclick=\"deleteComment(this,\'"+data+"\')\" href='javascript:void(0);'"
+                                     +" src='<%=request.getContextPath()%>/apps/gallery/images/icon_delete_link.gif'></a>"
+                                     +"</div></span></div>");
+                                                   
+                        $("#commentId").val('');
+                    }
+                });*/
+                
+            }
+        }); 
+    });
+</script>
+<script>
+    function editCommentDiv(obj){
+        $(".editCommentDiv").hide();
+        $(".user-comments").show();
+        $(".user-name").show();
+        $(obj).parent("div").parent("span").hide();
+        $(obj).parent("div").parent("span").prev("span").hide();
+        $("#newCommentId").hide();
+        $(obj).parent("div").parent("span").next("span").show();
+    }
+</script>
+</head>
+<body>
+<%var photoNode=currentNode.getNode(request.getParameter("photoId"));%>
+    <div class="picture-comments">
+            <% 
+             if(photoNode.getNode("Feature").hasNode("Comment") &&
+                    photoNode.getNode("Feature").getNode("Comment").hasNodes()){
+               var commentNode=photoNode.getNode("Feature").getNode("Comment").getNodes();
+               for( k=0;k<commentNode.length;k++){
+            
+                var commentUserNode=photoNode.session.getNode("/content/user/"+commentNode[k].userId);
+                %>  <div class="user-info">
+                        <div class="user-pic">
+                            <% if(commentUserNode.hasProperty("profileImage")){
+                             %>
+                                <img class='picture'  src="<%=commentUserNode.profileImage%>" height="70px" width="80px" />
+                            <%}else{  %>
+                                 <img class='picture' src="<%=request.getContextPath()%>/apps/user/css/images/photo.gif" /> 
+                            <%}%>
+                        </div>
+                        <span class="user-name"><%=commentUserNode.name%> <%=commentUserNode.lastName?commentUserNode.lastName:""%></span>
+                        <span class="user-comments" ><%=commentNode[k].comment%>
+                            <div class="comment-action">15 Jun 2013 15:13 <span class="divider">.</span>
+                            <a href="javascript:void(0);" onclick="editCommentDiv(this)"><img
+                                 src="<%=request.getContextPath()%>/apps/gallery/images/icon_edit_link.gif" 
+                                 align="absmiddle" /></a> 
+                            <span class="divider">.</span> 
+                            <a href="javascript:void(0);"onclick="deleteComment(this,'<%=commentNode[k].getName()%>')" ><img 
+                                  src="<%=request.getContextPath()%>/apps/gallery/images/icon_delete_link.gif"
+                                  align="absmiddle" /></a></div> 
+                        </span>
+                         <span class="editCommentDiv" style="display:none;">
+                            <textarea id="commentId" class="commentText" placeholder="Write a comment..." 
+                                style="height:21px;resize:none;border-radius:0px;"  
+                                ><%=commentNode[k].comment%></textarea>
+                         </span>
+                    </div>
+                <%
+               }
+             } 
+            %>     
+    </div>
+    
+    <%var requestUserNode=photoNode.session.getNode("/content/user").getNode("pran3bull_gmail.com");%>
+<input type="hidden" id="requestUserNameId" value="<%=requestUserNode.name%>"  />
+<input type="hidden" id="requestUserLastNameId" 
+       value="<%=requestUserNode.lastName?requestUserNode.lastName:""%>"  />
+
+<div class="user-info" id="newCommentId">
+    <div class="user-pic">
+        <% if(requestUserNode.hasProperty("profileImage")){
+         %>
+            <input type="hidden" id="requestUserProfileId" value="<%=requestUserNode.profileImage%>"  />
+            <img class='picture'  src="<%=requestUserNode.profileImage%>" />
+        <%}else{  %>
+             <input type="hidden" id="requestUserProfileId" value="<%=requestUserNode.getContextPath()
+                        %>/apps/user/css/images/photo.gif"  />
+             <img class='picture' src="<%=request.getContextPath()%>/apps/user/css/images/photo.gif" /> 
+        <%}%>
+    </div>
+    <div>
+        <textarea id="commentId" class="commentText" placeholder="Write a comment..." 
+            style="height:21px;resize:none;border-radius:0px;"  ></textarea>
+    </div>          
+</div>   
+</body>
+</html>

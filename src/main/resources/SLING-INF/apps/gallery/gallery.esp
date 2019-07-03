@@ -1,0 +1,154 @@
+<%load("include/header.esp");%>
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+<script>
+    $(function(height){
+        $("p").height()
+        var popHeight = $(".popup-picture").height();
+        $(".picture-comments").css("min-height",popHeight);
+    });
+</script>
+<script>
+    $(function(){
+    var loop;
+    i=0;
+        $(".reload").mouseover(function(){
+            var length = $(this).children("div").length;
+             var obj = $(this).children("div");
+            obj[0].style.opacity=1;
+            $(this).children("div").not(":first").fadeTo('fast',0)
+           
+             loop = setInterval(function() {
+                  if (i < length - 1) {
+                        i++;
+                        obj[i].style.opacity=1;
+                        obj[i-1].style.opacity=0;
+                    } else {
+                        i = 0;
+                         obj[i].style.opacity=1;
+                         obj[length - 1].style.opacity=0;
+                    } 
+                  }, 1500);
+            }).mouseout(function(){
+                clearInterval(loop);
+                i = 0;
+                var divObj = $(this).children("#cover").get(0);
+                divObj.style.opacity=1;
+               // $(this).children("div #cover").fadeTo('fast',1);
+                $(this).children("div").not("#cover").fadeTo('fast',0);
+                
+            }).click(function(){
+                clearInterval(loop);
+                i = 0;
+            });
+    });
+</script>
+</head>
+<body>
+<div class="album-page-header">
+        <h3>Albums</h3>
+            <div class="album-button">
+                <a href="<%=request.getContextPath()%>/servlet/gallery/show.addPhoto?photo=new&userId=<%=request.getParameter("userId")%>"><img src="<%=request.getContextPath()%>/apps/gallery/images/icon_add_link.gif" align="absmiddle" /> Add Album</a>
+                <a href="<%=request.getContextPath()%>/servlet/gallery/show.addVideo?userId=<%=request.getParameter("userId")%>"><img src="<%=request.getContextPath()%>/apps/gallery/images/icon_add_link.gif" align="absmiddle" /> Add Video</a>
+                <!--<a href="#"><img src="images/icon_edit_link.gif" align="absmiddle" /> Edit</a>-->
+            </div>
+</div>
+<!--<div style="width:0px;height:0px;">
+            <a class="reload" href="#"></a>
+</div>-->
+<ul class="photo-album">
+<%
+if(currentNodeProvided){
+    if(currentNode.hasNode("photo") && 
+            currentNode.getNode("photo").hasNodes()){
+        var albumNode=currentNode.getNode("photo")
+                            .getNodes();
+        for( i in albumNode){
+        %>
+            <li style="width:141px;height:130px;">
+            <a href="<%=request.getContextPath()%>/servlet/gallery/show.photoView?userId=<%=
+            request.getParameter("userId")%>&album=<%=albumNode[i].getName()%>" class="reload">
+        <%
+            if(albumNode[i].hasNodes()){
+            var album=albumNode[i].getNodes();
+            var flag=0;
+            if(albumNode[i].hasProperty("albumCover")){
+            if(albumNode[i].hasNode(albumNode[i].albumCover)){
+            %>
+                <div style="opacity:1;position: absolute;overflow:hidden;height:100px;width: 141px;" id="cover"> 
+                <img src="<%=request.getContextPath()+albumNode[i]
+                                .getNode(albumNode[i].albumCover)
+                                .getNode("x150")%>" />
+                </div>                
+            <%}}
+            for(k=0;(k<7 && k<album.length);k++){
+                if(albumNode[i].hasProperty("albumCover")){
+                    if(albumNode[i].albumCover!=album[k].getName()){
+                    %>
+                        <div style="opacity:0;position: absolute;overflow:hidden;height:100px;width: 141px;">
+                        <img src="<%=request.getContextPath()+album[k].getNode("x150")%>" />
+                    <%}%>  
+                  </div>
+                    
+                <%}else{
+                      if(k==0){
+                        %>
+                            <div style="opacity:1;position: absolute;overflow:hidden;height:100px;width: 141px;" id="cover"> 
+                        <%
+                        }else{
+                         %>
+                            <div style="opacity:0;position: absolute;overflow:hidden;height:100px;width: 141px;">
+                         <%     
+                        }
+                      %>
+                        <img src="<%=request.getContextPath()+album[k].getNode("x150")%>" />
+                        </div>
+                      <%
+                    }%>   
+                <%}%>
+             <%}%>
+           </a><br />
+        <div class="thumb-name" style="margin-top: 85px !important;"><%=albumNode[i].albumName?albumNode[i].albumName:albumNode[i].getName()%><br  />
+            <span class="note"><%=albumNode[i].getNodes().length%> photos</span>
+            <!--<span class="permission">Public</span>-->
+        </div>
+        <div class="thumb-comments"></div>
+        
+        </li>
+        <%    
+        }                        
+                        
+    }
+    %>
+    <li style="width:141px;height:130px;">
+        <div style="height:100px;">
+            <a href="<%=request.getContextPath()%>/servlet/gallery/show.videoGallery?userId=<%=request.getParameter("userId")%>">
+                <img src="<%=request.getContextPath()%>/apps/gallery/images/video.png" class="thumb-image" 
+                style="padding-left:18px;" height="100px" />
+            </a>
+        </div>
+        <div class="thumb-name">Videos <br  /><span class="note"><%if(currentNode.hasNode("video") 
+            && currentNode.getNode("video").hasNodes()){
+                var videoNodes=currentNode.getNode("video")
+                                    .getProperty("videoNumber");
+                                    out.print(videoNodes);
+            }else{
+                out.print("0");
+            }%> videos</span></div>
+        <div class="thumb-comments"></div>
+        </li>
+    
+<%}else{%>
+      <li style="width:141px;height:130px;">
+        <div style="height:100px;">
+            <a href="#">
+                <img src="<%=request.getContextPath()%>/apps/gallery/images/video.png" class="thumb-image" 
+                style="padding-left:18px;" height="100px" />
+            </a>
+        </div>
+        <div class="thumb-name">Videos <br  /><span class="note">0 videos</span></div>
+        <div class="thumb-comments"></div>
+      </li>
+<%}%>
+</ul>
+</body>
+</html>

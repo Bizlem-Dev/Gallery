@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Bizlem Photostory</title>
+<meta name="description" content="" />
+<%load("../common/links.esp");%> 
+
+
+    <%load("../common/header.esp");%>
+<div class="container">
+	<div class="row">
+    	<div class="col-md-3">
+        	<h3><%=currentNode.title%></h3>
+          
+            <div id="myCarousel" class="carousel slide" style="width:900px;padding-top:20px">
+                <div class="carousel-inner">           
+                    <% var picimgnode=currentNode.getNodes();
+                    var c=0;
+                    for(i in picimgnode){%>          
+                   <%if(c==0){%> 
+                   
+                   <figure class="item active">
+                  <% if(picimgnode[i].fileType!="" && picimgnode[i].fileType=="video"){%>
+                  <video width="270" height="240" class="thumbnail"style="width: 60%;float:left"  controls>
+                		<source src="<%=picimgnode[i].imgPath%>" type="video/webm">
+                			 Your browser does not support the video tag.
+           			  </video><div style="float: left;width:35%">
+                   <%}else{%>
+                   
+                    <img class="thumbnail" style="width: 60%;float:left" src="<%=picimgnode[i].imgPath%>" alt="slide<%=c%>">
+                    <div style="float: left;width:35%">
+                   
+                   <%}%>
+                    <%=picimgnode[i].picdata%>
+                    
+                    </div>
+                   </figure> 
+                  <% }else{%>
+                  
+                  <figure class="item">
+                      <% if(picimgnode[i].fileType!="" && picimgnode[i].fileType=="video"){%>
+                  <video width="270" height="240" class="thumbnail" style="width: 60%;float:left"  controls>
+                		<source src="<%=picimgnode[i].imgPath%>" type="video/webm">
+                			 Your browser does not support the video tag.
+           			  </video><div style="float: left;width:35%">
+                   <%}else{%>
+                   
+                    <img class="thumbnail" style="width: 60%;float:left" src="<%=picimgnode[i].imgPath%>" alt="slide<%=c%>">
+                    <div style="float: left;width:35%">
+                   
+                   <%}%>
+                    <%=picimgnode[i].picdata%>
+                    
+                    </div>
+                   </figure> 
+                  
+                   <%} 
+                   c++;
+                   } %>
+                    
+                                                                                                   
+                </div>              
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev"><i class="fa fa-angle-double-left"></i></a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next"><i class="fa fa-angle-double-right"></i></a>                                   
+            </div><!-- End Carousel -->  
+    	</div>
+    </div>
+</div>
+
+
+ <%load("../common/footer.esp");%>
+</body>
+</html>

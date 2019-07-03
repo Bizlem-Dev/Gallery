@@ -1,0 +1,40 @@
+ <%
+ var person=request.getAttribute("storylist");
+ 
+ for(var k=0; k<person.size(); k++) {
+ 					var path=person.get(k);
+                          
+            %>
+
+                        <div class="search-list-mobile">
+                            <div class="thumbnail">
+                              <div class="thumb">
+                              <%if(path.hasNodes()){
+                              var img=path.getNodes();%>
+                             
+                              <img src="<%=img[0].getProperty('imgPath')%>" alt="<%=path.eventName%>">
+                              <%}else{%>
+                                  <img src="images/category-list.jpg" alt="thumbnail">
+                             <%}%>
+                              </div>
+                            <div class="caption">
+                              <h3><a href="<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=path.getName()%>"><%=path.title%></a></h3>
+                              <p class="ellipsis" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                            <%if(path.hasNodes()){
+                              var img=path.getNodes();
+                              out.print(img[0].getProperty('picdata'));
+                              }%> 
+                               </p>
+                               
+                            </div>
+                            <div class="all-btn">     
+					 <% var remoteUser = new String(request.getRemoteUser()).valueOf();
+                            var  creater= new String(path.getProperty("ceraterEmail")).valueOf();
+                            
+                            if(request.getRemoteUser() != null && !request.getRemoteUser().equals("anonymous") && creater.equals(remoteUser)) {%>
+                                   <a href="<%=request.getContextPath()%>/servlet/photo/photoshow.delete?photodelete=<%=path.getName()%>" class="btn btn-default">Delete</a>
+                            <% }%>
+                            </div>
+                          </div>
+                        </div>
+                        <%}%>

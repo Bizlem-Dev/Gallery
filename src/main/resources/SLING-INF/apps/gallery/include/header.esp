@@ -1,0 +1,9 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<!--<link rel="stylesheet" href="<%=request.getContextPath()%>/apps/gallery/css/style.css" />
+<link href="<%=request.getContextPath()%>/apps/gallery/css/album.css" rel="stylesheet" type="text/css" />
+<script src="<%=request.getContextPath()%>/apps/gallery/js/jquery.min.js"></script>-->
+<link href="<%=request.getContextPath()%>/wro/gallery.css" rel="stylesheet" type="text/css" />
+<script src="<%=request.getContextPath()%>/wro/gallery.js"></script>

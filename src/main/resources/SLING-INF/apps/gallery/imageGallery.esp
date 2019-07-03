@@ -1,0 +1,117 @@
+<% var currentNodeProvided = ((typeof currentNode != "undefined"));  %>
+<%load("include/header.esp");%>
+<script>
+    $(function(){  
+        $("ul.photo-album > li").click(function(){
+            $(".picture-popup").toggle("");
+        });
+        
+        $(".icon-close").click(function(){
+            $(".picture-popup").toggle("");
+        });
+        
+        var popHeight = $(".picture-div").height();
+        $(".picture-comments").css("min-height",popHeight);
+        $(".testDivId").mouseover(function(){
+            $(this).children(".photo-relative-icon").show();
+         }).mouseout(function(){
+            $(this).children(".photo-relative-icon").hide();
+         });
+    });
+    
+    function clickLike(obj,photoId,flag){
+        $.ajax({
+            type:'POST',
+            url: '<%=request.getContextPath()%>/servlet/gallery/show.likePhoto',
+            data:'userId=<%=request.getParameter("userId")%>&albumId=<%=
+                    request.getParameter("album")%>&photoId='+photoId,
+            success:function(){
+                var number = parseInt($(obj).parent("div").next("div").children(".photo-like").text());
+                if(flag=='like'){
+                    $(obj).hide();
+                    $(obj).next("a").show();
+                    $(obj).parent("div").next("div").children(".photo-like").text(number+1);
+                }else if(flag=='unlike'){
+                    $(obj).hide();
+                    $(obj).prev("a").show();
+                    $(obj).parent("div").next("div").children(".photo-like").text(number-1);
+                } 
+            }
+        });
+    }
+</script>
+</head>
+<body>
+
+<div class="album-page-header">
+  <h3><%=currentNode.albumName%></h3>
+  <div class="album-button">
+    <a href="<%=request.getContextPath()%>/servlet/gallery/show.addPhoto?photo=add&album=<%=currentNode.getName()%>"><img src="<%=request.getContextPath()%>/apps/gallery/images/icon_add_link.gif" align="absmiddle" /> Add Photo</a>
+    <a  href="<%=request.getContextPath()%>/servlet/gallery/show.albumEdit?userId=<%=
+                            request.getParameter("userId")%>&album=<%=currentNode.getName()%>">
+          <img src="<%=request.getContextPath()%>/apps/gallery/images/icon_edit_link.gif" align="absmiddle" /> Edit
+    </a>
+    <a href="javascript:history.back()">&nbsp; Go Back </a>
+  </div>
+</div>
+<ul class="photo-album">
+<%
+if(currentNode.hasNodes()){
+    var imageNodes=currentNode.getNodes();
+    for(i in imageNodes){
+    %>  <li style="height:129px;" class="testDivId">  
+            <a  href="<%=request.getContextPath()%>/servlet/gallery/show.viewPhoto?userId=<%=
+                request.getParameter("userId")%>&album=<%=currentNode.getName()%>&photoId=<%=
+                imageNodes[i].getName()%>" ><img src="<%=request.getContextPath()+imageNodes[i].getNode("x150")%>" 
+                    height="100px"/></a>
+            
+            <%
+                var commentNum=0;
+                var likeNum=0;
+                var likeFlag=0;
+                if(imageNodes[i].hasNode("Feature")){
+                 if(imageNodes[i].getNode("Feature").hasNode("Like") 
+                    && imageNodes[i].getNode("Feature").getNode("Like").hasNodes()){
+                        likeNum=imageNodes[i].getNode("Feature").getNode("Like")
+                                        .getNodes().length;
+                        if(imageNodes[i].getNode("Feature").getNode("Like")
+                                .hasNode(request.getParameter("userId"))){
+                            likeFlag=1;
+                        }                                        
+                    }
+                 if(imageNodes[i].getNode("Feature").hasNode("Comment") 
+                    && imageNodes[i].getNode("Feature").getNode("Comment").hasNodes()){
+                        commentNum=imageNodes[i].getNode("Feature").getNode("Comment")
+                                        .getNodes().length;
+                    }
+                }   
+            %>
+            <div class="thumb-icon">
+              <%if(likeFlag==1){%>
+                <a href="javascript:void(0);" style="display:none;" 
+                        onclick="clickLike(this,'<%=imageNodes[i].getName()%>','like')" >Like</a>
+                <a href="javascript:void(0);" 
+                    onclick="clickLike(this,'<%=imageNodes[i].getName()%>','unlike')">Unlike</a>
+              <%}else{%>
+                <a href="javascript:void(0);" 
+                    onclick="clickLike(this,'<%=imageNodes[i].getName()%>','like')" >Like</a>
+                <a href="javascript:void(0);" style="display:none;" 
+                         onclick="clickLike(this,'<%=imageNodes[i].getName()%>','unlike')">Unlike</a>
+              <%}%>          
+                <!--<a href="#">Comment</a>-->
+            </div>
+            <div class="photo-relative-icon" style="display:none;">
+                
+                <span class="photo-like"><%=likeNum%></span>
+                <span class="photo-comment"><%=commentNum%></span>
+                <img class="photo-gradient" src="<%=request.getContextPath()%>/apps/gallery/images/gradient.png" />
+                
+            </div>    
+        </li>
+    <%    
+    }
+}
+%>
+</ul>
+</body>
+</html>

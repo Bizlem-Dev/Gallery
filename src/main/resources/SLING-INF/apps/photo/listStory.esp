@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<% var currentNodeProvided = ((typeof currentNode != "undefined")); %>
+
+<html>
+<head>
+<title>Phot Story Gallery</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<meta name="keywords" content="ajax,jquery,jquery plugins,master multimedia,yahoo widget,web applications" />
+
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/apps/gallery/css/base.css"/>
+<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/apps/gallery/css/theme.css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="<%=request.getContextPath()%>/apps/gallery/js/jquery.accessible-news-slider.js"></script>
+
+<script type="text/javascript">
+// when the DOM is ready, convert the feed anchors into feed content
+jQuery(document).ready(function() {
+
+	jQuery('#newsslider').accessNews({
+		title : "Photo Story:",
+		subtitle:"stories from the internet",
+		speed : "slow",
+		slideBy : 4,
+		slideShowInterval: 100000,
+		slideShowDelay: 100000
+	});
+
+	jQuery('#newsslider2').accessNews({
+		title : "Photo Story:",
+		subtitle:"stories from the internet",
+		speed : "slow",
+		slideBy : 4,
+		slideShowInterval: 100000,
+		slideShowDelay: 100000
+	});
+
+});
+</script>
+</head>
+<body>
+
+	<ul id="newsslider"> 
+
+		
+		
+	<%	var plist=request.getAttribute("photostory");
+		for(i=0;i<plist.size();i++){
+		 var storytitleNode=plist.get(i);
+		
+		 var picNode=storytitleNode.getNodes();
+		 if(picNode[0].fileType!="" && picNode[0].fileType=="video"){
+		%>
+	<li>
+			<a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>">
+			<video width="82" height="30" controls>
+                                  <source src="<%=picNode[0].imgPath%>" type="video/webm">
+                                  Your browser does not support the video tag.
+             </video> 
+			</a>
+			<h3>
+			<a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>">
+			<%=storytitleNode.title%></a></h3>
+			<p><%=picNode[0].picdata%>
+			 <br /><a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>"> &raquo; read more</a></p>
+		</li>
+		
+		<% 		
+		}else{%>
+		<li>
+			<a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>">
+			<img src="<%=picNode[0].imgPath%>" width="82" height="30" /></a>
+			<h3>
+			<a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>">
+			<%=storytitleNode.title%></a></h3>
+			<p><%=picNode[0].picdata%>
+			 <br /><a href="top.window.location.href.<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode.getName()%>"> &raquo; read more</a></p>
+		</li>
+		<%}}
+	
+		%>
+		
+	</ul>
+</body>
+</html>

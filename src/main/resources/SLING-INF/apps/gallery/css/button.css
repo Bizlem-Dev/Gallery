@@ -1,0 +1,37 @@
+input[type="submit"], input[type="button"], input[type="reset"] { -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-right-colors: none; -moz-border-top-colors: none; background-color: #F5F5F5; background-image: -moz-linear-gradient(center top , #FFFFFF, #E6E6E6); background-repeat: repeat-x; border-color: #CCCCCC #CCCCCC #B3B3B3; border-image: none; border-radius: 4px 4px 4px 4px; border-style: solid; border-width: 1px; box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05); color: #333333; cursor: pointer; display: inline-block; font-size: 13px; line-height: 18px; margin-bottom: 0; padding: 4px 10px; text-align: center; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75); vertical-align: middle; text-decoration:none; }
+input[type="reset"]:hover, input[type="reset"]:active, input[type="reset"].active, input[type="reset"].disabled, input[type="submit"][reset],
+input[type="submit"]:hover, input[type="submit"]:active, input[type="submit"].active, input[type="submit"].disabled, input[type="submit"][disabled],
+input[type="button"]:hover, input[type="button"]:active, input[type="button"].active, input[type="button"].disabled, input[type="submit"][button] { background-color: #E6E6E6; }
+input[type="submit"]:active, input[type="submit"].active { }
+
+input[type="submit"]:hover, input[type="submit"]:active, input[type="submit"].active, input[type="submit"].disabled, input[type="submit"][disabled] 
+input[type="button"]:hover, input[type="button"]:active, input[type="button"].active, input[type="button"].disabled, input[type="button"][disabled] 
+input[type="reset"]:hover, input[type="reset"]:active, input[type="reset"].active, input[type="reset"].disabled, input[type="reset"][disabled] 
+{ background-color: #E6E6E6; }
+
+input[type="submit"]:active, input[type="submit"].active { }
+input[type="submit"]:first-child { }
+input[type="submit"]:first-child { }
+input[type="submit"]:hover, input[type="button"]:hover { background-color: #E6E6E6; background-position: 0 -15px; color: #333333; text-decoration: none; transition: background-position 0.1s linear 0s; }
+input[type="submit"]:focus, input[type="button"]:focus { outline: thin dotted #333333; outline-offset: -2px; }
+input[type="submit"].active, input[type="submit"]:active, input[type="button"].active, input[type="button"]:active { background-color: #E6E6E6; background-image: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.05); outline: 0 none; }
+input[type="submit"].disabled, input[type="submit"][disabled], input[type="button"].disabled, input[type="button"][disabled] { background-color: #E6E6E6; background-image: none; box-shadow: none; cursor: default; opacity: 0.65; }
+
+input[type="submit"], input[type="submit"]:hover, input[type="button"], input[type="button"]:hover, input[type="reset"], input[type="reset"]:hover { color: #FFFFFF; text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); }
+
+input[type="submit"].active, input[type="button"].active, input[type="reset"].active { color: rgba(255, 255, 255, 0.75); }
+input[type="submit"], input[type="button"] { border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
+input[type="submit"], input[type="button"] { background-color: #0074CC; background-image: -moz-linear-gradient(center top , #0088CC, #0055CC); background-repeat: repeat-x; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
+
+input[type="submit"]:hover, input[type="submit"]:active, input[type="submit"].active, input[type="submit"].disabled, input[type="submit"][disabled],
+input[type="button"]:hover, input[type="button"]:active, input[type="button"].active, input[type="button"].disabled, input[type="button"][disabled] { background-color: #0055CC; }
+input[type="submit"]:active, input[type="submit"].active { }
+input[type="submit"]:hover, input[type="submit"]:active, input[type="submit"].active, input[type="submit"].disabled, input[type="submit"][disabled],
+input[type="button"]:hover, input[type="button"]:active, input[type="button"].active, input[type="button"].disabled, input[type="button"][disabled] { background-color: #0055CC; }
+input[type="submit"]:active, input[type="submit"].active { }
+
+input[type="reset"] { background-color: #49AFCD; background-image: -moz-linear-gradient(center top , #5BC0DE, #2F96B4); background-repeat: repeat-x; border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); }
+input[type="reset"]:hover, input[type="reset"]:active, input[type="reset"].active, input[type="reset"].disabled, input[type="reset"][disabled] { background-color: #2F96B4; }
+input[type="reset"]:active, input[type="reset"].active { }
+input[type="reset"]:hover, input[type="reset"]:active, input[type="reset"].active, input[type="reset"].disabled, input[type="reset"][disabled] { background-color: #2F96B4; }
+input[type="reset"]:active, input[type="reset"].active { }

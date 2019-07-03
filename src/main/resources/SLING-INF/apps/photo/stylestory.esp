@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<% var currentNodeProvided = ((typeof currentNode != "undefined")); %>
+ <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/css/bootstrap.css"> 
+        <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/css/font-awesome.min.css">
+        <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/FlexSlider/flexslider.css" type="text/css" media="screen" /> 
+        <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/css/color.css">
+        <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/css/custom.css">
+
+        <script src="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/jquery.min.js"></script>
+        <script src="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/bootstrap.min.js"></script>
+        <script src="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/FlexSlider/jquery.flexslider.js"></script>
+        <script src="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/hover-dropdown/bootstrap-hover-dropdown.min.js"></script>
+
+        <script src="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/tabdrop/js/bootstrap-tabdrop.js"></script>
+        <link rel="stylesheet" href="<%=request.getScheme()+"://"+request.getServerName()+":"+ request.getServerPort()+request.getContextPath()%>/apps/js/tabdrop/css/tabdrop.css">
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $('.nav-pills, .nav-tabs').tabdrop()
+        }); 
+          </script>
+
+ <div class="col-sm-5 col-xs-12">
+            <h3>Photo Story: <small>stories from the internet</small></h3>
+            <!-- Place somewhere in the <body> of your page -->
+                <div id="slider" class="flexslider photo-story">
+                  <ul class="slides">
+                  <%	var storytitleNode=currentNode.getNodes();
+		for(i in storytitleNode){
+		 
+		 var picNode=storytitleNode[i].getNodes();
+		
+	if(picNode[0].fileType!="" && picNode[0].fileType=="video"){ %>
+                   
+		<li>
+    	
+			<video width="450" height="200"controls>
+                <source src="<%=picNode[0].imgPath%>" type="video/webm">
+                 Your browser does not support the video tag.
+             </video> 
+	<h3><%=storytitleNode[i].title%></h3>
+          
+			 <p class="sub-title"><%=picNode[0].picdata%></p>
+            <p class="link"><small><a href="<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode[i].getName()%>">Read full article</a></small></p>
+		 
+	</li>
+	
+    <% 			
+}else{ %>
+<li>
+    	
+		
+        	
+			<img src="<%=picNode[0].imgPath%>"style="height:225px"/> 	
+			<h3><%=storytitleNode[i].title%></h3>
+          
+			 <p class="sub-title"><%=picNode[0].picdata%></p>
+            <p class="link"><small><a href="#"  onclick="top.window.location.href='<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode[i].getName()%>';">Read full article</a></small></p>
+		 
+	</li>
+
+<%}} %>
+    
+                  </ul>
+                </div>
+                <div id="carousel" class="flexslider photo-story-thumb">
+                  <ul class="slides" style="  padding: 15px 0;">
+                <%   for(i in storytitleNode){
+		 
+		 var picNode=storytitleNode[i].getNodes();
+		
+	if(picNode[0].fileType!="" && picNode[0].fileType=="video"){ %>
+                   <%	var storytitleNode=currentNode.getNodes(); %>
+		
+		<li>
+    	 <figure>
+             <video width="105" height="70" controls>
+                <source src="<%=picNode[0].imgPath%>" type="video/webm">
+                 Your browser does not support the video tag.
+             </video> 
+                          <figcaption>
+                              <small><%=storytitleNode[i].title%></small>
+                          </figcaption>
+                      </figure>
+				</li>
+	
+    <% 			
+}else{ %>
+<li>
+    
+                      <figure>
+                      
+                        <a href="#"  onclick="top.window.location.href='<%=request.getContextPath()%>/servlet/photo/photoshow.viewstory?recentAdd=<%=storytitleNode[i].getName()%>';">
+						<img src="<%=picNode[0].imgPath%>" /></a> 
+                          <figcaption>
+                              <small><%=storytitleNode[i].title%></small>
+                          </figcaption>
+                      </figure>
+                    </li>
+
+<%}} %>
+                    
+                    <!-- items mirrored twice, total of 12 -->
+                  </ul>
+                </div>
+
+        <script type="text/javascript">
+             // The slider being synced must be initialized first
+              $('#carousel').flexslider({
+                animation: "slide",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: false,
+                itemWidth: 105,
+                itemMargin: 15,
+                asNavFor: '#slider'
+              });
+             
+              
+              /*$('#slider').flexslider({
+                animation: "slide",
+                controlNav: false,
+                animationLoop: false,
+                slideshow: false,
+                sync: "#carousel"
+              });*/
+            $(function ($) {
+                var flex = $("#slider").flexslider({
+                    animation: "fade",
+                    animationLoop: false,
+                    keyboard: true,
+                    slideshow: false,
+                    sync: "#carousel"
+                });
+                $('#carousel li').on('mouseover',function(){
+                    $(this).trigger('click');
+                });
+            });
+        </script>
+        </div>
+</body>
+</html>
